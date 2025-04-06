@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    environment {
+        AWS_ACCESS_KEY_ID =     // Jenkins credential ID
+        AWS_SECRET_ACCESS_KEY =  // Jenkins credential ID
+    }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git ''
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                input "Approve to Apply?"
+                sh 'terraform apply -auto-approve'
+            }
+        }
+    }
+}
